@@ -1,0 +1,107 @@
+\pgfdeclareshape{oscillator}{
+  \savedanchor{\vertexpoint}{%
+    \pgfpoint{0cm}{-1cm}
+  }
+  \savedanchor{\focuspoint}{%
+    \pgfpoint{0cm}{-0.75cm}
+  }
+  \savedanchor{\leftendpoint}{%
+    \pgfpoint{-2cm}{3cm}
+  }
+  \savedanchor{\rightendpoint}{%
+    \pgfpoint{2cm}{3cm}
+  }
+  \savedanchor{\leftsidepoint}{%
+    \pgfpoint{-1cm}{0cm}
+  }
+  \anchor{vertex}{\vertexpoint}
+  \anchor{focus}{\focuspoint}
+  \anchor{center}{\pgfpointorigin}
+  \anchor{left side}{\leftsidepoint}
+  \anchor{right side}{%
+    \leftsidepoint
+    \pgf@x=-\pgf@x
+  }
+  \anchor{left end}{\leftendpoint}
+  \anchor{right end}{\rightsidepoint}
+  \anchorborder{%
+    % Funzione che calcola l'intersezione tra la retta (center) -- P, dove 
+    % P=(\pgf@x, \pgf@y) specificato nel sistema di coordinate relative al
+    % nodo `center`, e il contorno della forma del nodo.
+    \@tempdima=\pgf@x
+    \@tempdimb=\pgf@y
+    \pgfmathparse{greater(2*\@tempdimb, abs(3*\@tempdima))}
+    \if\pgfmathresult1
+      % 1) Se P è contenuto nel prolungamento (immaginario) della parabola
+      %    all'infinito, mi fermo al segmento (-2,3) -- (2,3). Questo vale
+      %    in realtà per tutti i punti compresi nell'angolo determinato
+      %    dalle rette (0,0) -- (-2,3) e (0,0) -- (2,3).
+      \pgfpointintersectionoflines%
+      {\rightendpoint}{\leftendpoint}
+      {\pgfpointorigin}{\pgfpoint{\@tempdima}{\@tempdimb}}
+    \else
+      % 2) Per tutti gli altri P, determino l'intersezione tra la retta e
+      %    il disegno della parabola.
+      \pgfmathparse{equal(\@tempdima,0)}
+      \if\pgfmathresult1
+        \vertexpoint
+      \else
+        \pgfmathsetmacro\xscalecm{(\@tempdimb+veclen(\@tempdimb,2*\@tempdima))/(2*\@tempdima)}
+        % Non so bene il perché serva sign(\@tempdima)... però così funziona!
+        \pgfmathsetmacro\yscalecm{sign(\@tempdima)*\xscalecm^2-1}
+        \pgfpointadd%
+        {\pgfpointscale{\xscalecm}{\pgfpoint{1cm}{0cm}}}
+        {\pgfpointscale{\yscalecm}{\pgfpoint{0cm}{1cm}}}
+      \fi
+    \fi
+  }
+  \backgroundpath{
+    % Contorno della parabola
+    \pgfpathmoveto{\leftendpoint}
+    \pgfpathparabola{\pgfpoint{2cm}{-4cm}}{\pgfpoint{2cm}{4cm}}
+    \pgfpathclose
+  }
+  \beforebackgroundpath{%
+    % Contorno della parabola
+    \pgfpathmoveto{\leftendpoint}
+    \pgfpathparabola{\pgfpoint{2cm}{-4cm}}{\pgfpoint{2cm}{4cm}}
+    \pgfusepath{stroke}
+    % Linee dei livelli (per ora calcolo le intersezioni a mano...)
+    % y = x^2-1  =>  x = sqrt(1+y)
+    \pgfmathparse{sqrt(1-0.75)}
+    \pgfpathmoveto{\pgfpoint{-\pgfmathresult cm}{-0.75cm}}
+    \pgfpathlineto{\pgfpoint{ \pgfmathresult cm}{-0.75cm}}
+    \pgfusepath{stroke}
+    %
+    \pgfmathparse{sqrt(1-0.25)}
+    \pgfpathmoveto{\pgfpoint{-\pgfmathresult cm}{-0.25cm}}
+    \pgfpathlineto{\pgfpoint{ \pgfmathresult cm}{-0.25cm}}
+    \pgfusepath{stroke}
+    %
+    \pgfmathparse{sqrt(1+0.25)}
+    \pgfpathmoveto{\pgfpoint{-\pgfmathresult cm}{ 0.25cm}}
+    \pgfpathlineto{\pgfpoint{ \pgfmathresult cm}{ 0.25cm}}
+    \pgfusepath{stroke}
+    %
+    \pgfmathparse{sqrt(1+0.75)}
+    \pgfpathmoveto{\pgfpoint{-\pgfmathresult cm}{ 0.75cm}}
+    \pgfpathlineto{\pgfpoint{ \pgfmathresult cm}{ 0.75cm}}
+    \pgfusepath{stroke}
+    %
+    \pgfmathparse{sqrt(1+1.25)}
+    \pgfpathmoveto{\pgfpoint{-\pgfmathresult cm}{ 1.25cm}}
+    \pgfpathlineto{\pgfpoint{ \pgfmathresult cm}{ 1.25cm}}
+    \pgfusepath{stroke}
+    %
+    \pgfmathparse{sqrt(1+1.75)}
+    \pgfpathmoveto{\pgfpoint{-\pgfmathresult cm}{ 1.75cm}}
+    \pgfpathlineto{\pgfpoint{ \pgfmathresult cm}{ 1.75cm}}
+    \pgfusepath{stroke}
+    %\pgfmathparse{sqrt(1+2.25)}
+    %\pgfpathmoveto{\pgfpoint{-\pgfmathresult cm}{ 2.25cm}}
+    %\pgfpathlineto{\pgfpoint{ \pgfmathresult cm}{ 2.25cm}}
+    %\pgfmathparse{sqrt(1+2.75)}
+    %\pgfpathmoveto{\pgfpoint{-\pgfmathresult cm}{ 2.75cm}}
+    %\pgfpathlineto{\pgfpoint{ \pgfmathresult cm}{ 2.75cm}}
+  }
+}
