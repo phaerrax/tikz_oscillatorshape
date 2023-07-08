@@ -1,0 +1,40 @@
+\makeatletter
+\pgfdeclareshape{two level system}{%
+  \saveddimen{\radius}{\pgf@x=1cm}
+  \savedanchor{\centerpoint}{\pgfpointorigin}
+  % Anchors
+  \inheritanchorborder[from=circle]%
+  \inheritanchor[from=circle]{north}%
+  \inheritanchor[from=circle]{north west}%
+  \inheritanchor[from=circle]{north east}%
+  \inheritanchor[from=circle]{center}%
+  \inheritanchor[from=circle]{west}%
+  \inheritanchor[from=circle]{east}%
+  \inheritanchor[from=circle]{mid}%
+  \inheritanchor[from=circle]{mid west}%
+  \inheritanchor[from=circle]{mid east}%
+  \inheritanchor[from=circle]{base}%
+  \inheritanchor[from=circle]{base west}%
+  \inheritanchor[from=circle]{base east}%
+  \inheritanchor[from=circle]{south}%
+  \inheritanchor[from=circle]{south west}%
+  \inheritanchor[from=circle]{south east}%
+  % Background path
+  \inheritbackgroundpath[from=circle]%
+  \beforebackgroundpath{%
+    \pgfutil@tempdima=\radius%
+    \advance\pgfutil@tempdima by-.5\pgflinewidth%
+    \pgfsetshortenstart{0pt}%
+    \pgfsetshortenend{0pt}%
+    \pgfsetarrows{-}%
+    % Lines representing the two energy levels
+    \pgfpathmoveto{\pgfpointadd{\centerpoint}{\pgfpoint{-0.437\pgfutil@tempdima}{-0.75*0.437\pgfutil@tempdima}}}%
+    \pgfpathlineto{\pgfpointadd{\centerpoint}{\pgfpoint{0.437\pgfutil@tempdima}{-0.75*0.437\pgfutil@tempdima}}}%
+    \pgfusepath{stroke}%
+    %
+    \pgfpathmoveto{\pgfpointadd{\centerpoint}{\pgfpoint{-0.437\pgfutil@tempdima}{0.75*0.437\pgfutil@tempdima}}}%
+    \pgfpathlineto{\pgfpointadd{\centerpoint}{\pgfpoint{0.437\pgfutil@tempdima}{0.75*0.437\pgfutil@tempdima}}}%
+    \pgfusepath{stroke}%
+  }%
+}%
+\makeatother
